@@ -1,3 +1,4 @@
+# калькулятор который
 import operator
 
 numbers = {'ноль': 0, 'один': 1, 'два': 2, 'три': 3, 'четыре': 4, 'пять': 5, 'шесть': 6,
@@ -7,7 +8,13 @@ operations = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': oper
 operations_symbol = {'минус': '-',
                      'плюс': '+',
                      'умножить': '*',
-                     'разделить': '/'}
+                     'разделить': '/',
+                     'делить': '/',
+                     'добавить': '+',
+                     'прибавить': '+',
+                     'домножить' : '*',
+                     'вычесть': '-',
+                     'поделить': '/'}
 
 def tokenize(text):
     ready_text = []
@@ -27,21 +34,37 @@ def tokenize(text):
             ready_text.append(operations_symbol[words])
 
     return ready_text
-def calculate():
 
 
 def calculate(tokens):
-    result = tokens[0]
-    for i in range(0, len(tokens)):
+    result = 0
+    while '*' in tokens or '/' in tokens:
         if '*' in tokens:
-            result = tokens[tokens.index('*') - 1] * tokens[tokens.index('*') + 1]
+            idx = tokens.index('*')
+            a, _, b = tokens[idx - 1 : idx + 2]
+            result = a * b
+            del tokens[idx - 1 : idx + 2]
+            tokens.append(result)
         elif '/' in tokens:
-            result = tokens[tokens.index('/') - 1] / tokens[tokens.index('/') + 1]
-        else:
-            if tokens[i] == '+':
-                result = result + tokens[i+1]
-            elif tokens[i] == '-':
-                result = result - tokens[i+1]
+            idx = tokens.index('/')
+            a, _, b = tokens[idx - 1:idx + 2]
+            result = a / b
+            del tokens[idx - 1:idx + 2]
+            tokens.append(result)
+
+    while '+' in tokens or '-' in tokens:
+        if '+' in tokens:
+            idx = tokens.index('+')
+            a, _, b = tokens[idx - 1:idx + 2]
+            result = a + b
+            del tokens[idx - 1:idx + 2]
+            tokens.append(result)
+        elif '-' in tokens:
+            idx = tokens.index('-')
+            a, _, b = tokens[idx - 1:idx + 2]
+            result = a - b
+            del tokens[idx - 1:idx + 2]
+            tokens.append(result)
 
     print(result)
     return result
