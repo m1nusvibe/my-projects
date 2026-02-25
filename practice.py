@@ -1,4 +1,5 @@
-# калькулятор который
+# Текстовый калькулятор — создайте программу,
+# которая выполняет арифметические операции, введенные в виде текста.
 import operator
 
 numbers = {'ноль': 0, 'один': 1, 'два': 2, 'три': 3, 'четыре': 4, 'пять': 5, 'шесть': 6,
@@ -38,34 +39,37 @@ def tokenize(text):
 
 def calculate(tokens):
     result = 0
-    while '*' in tokens or '/' in tokens:
-        if '*' in tokens:
-            idx = tokens.index('*')
-            a, _, b = tokens[idx - 1 : idx + 2]
-            result = a * b
-            del tokens[idx - 1 : idx + 2]
-            tokens.append(result)
-        elif '/' in tokens:
-            idx = tokens.index('/')
-            a, _, b = tokens[idx - 1:idx + 2]
-            result = a / b
-            del tokens[idx - 1:idx + 2]
-            tokens.append(result)
+    if not tokens: return 0
+    if len(tokens) == 1: return tokens[0]
+    i = 0
+    while i < len(tokens):
 
-    while '+' in tokens or '-' in tokens:
-        if '+' in tokens:
-            idx = tokens.index('+')
-            a, _, b = tokens[idx - 1:idx + 2]
-            result = a + b
-            del tokens[idx - 1:idx + 2]
-            tokens.append(result)
-        elif '-' in tokens:
-            idx = tokens.index('-')
-            a, _, b = tokens[idx - 1:idx + 2]
-            result = a - b
-            del tokens[idx - 1:idx + 2]
-            tokens.append(result)
-
-    print(result)
-    return result
-calculate(tokenize("два плюс пять разделить пять"))
+        if tokens[i] == '*' or tokens[i] == '/':
+            a, _, b = tokens[i-1:i+2]
+            if tokens[i] == '*':
+                result = a*b
+                tokens[i-1] = result
+                del tokens[i:i+2]
+            elif tokens[i] == '/':
+                result = a/b
+                tokens[i-1] = result
+                del tokens[i:i+2]
+        else:
+            i += 1
+    i = 0
+    while i < len(tokens):
+        if tokens[i] == '+' or tokens[i] == '-':
+            a, _, b = tokens[i-1:i+2]
+            if tokens[i] == '+':
+                result = a+b
+                tokens[i-1] = result
+                del tokens[i:i+2]
+            elif tokens[i] == '-':
+                result = a-b
+                tokens[i-1] = result
+                del tokens[i:i+2]
+        else:
+            i += 1
+    print(tokens[0])
+    return tokens[0]
+calculate(tokenize("семь плюс 9 разделить на 3"))
