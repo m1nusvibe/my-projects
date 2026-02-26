@@ -39,11 +39,19 @@ def tokenize(text):
 
 def calculate(tokens):
     result = 0
+    staples_expression = []
     if not tokens: return 0
     if len(tokens) == 1: return tokens[0]
     i = 0
     while i < len(tokens):
+        if tokens[i] == '(':
+            idx = tokens.index(')')
+            staples_expression = tokens[i+1:idx]
+            del tokens[i+1:idx+1]
+            inner_result = calculate(staples_expression)
+            tokens[i] = inner_result
 
+    while i < len(tokens):
         if tokens[i] == '*' or tokens[i] == '/':
             a, _, b = tokens[i-1:i+2]
             if tokens[i] == '*':
